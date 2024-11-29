@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PDF.js Viewer with MIDI Control</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    select {
+      width: 50%;
+      padding: 5px 20px;
+      margin: 8px 25%;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    option {
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <!-- <label for="file-selection">Choose a car:</label> -->
+    <select id="file-selection" name="file-selection" onchange="newSong(event.target.value)">
+      <option selected>Select a song...</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <div style="height: calc(99vh - 45px)" class="col-sm-12">
+      <iframe id="pdf-iframe" height="100%" width="100%" toolbar="0" view="FitW">
+        Select a song
+      </iframe>
+    </div>
+  </div>
+  </div>
+
+  <script src="pdf-files.js"></script>
+  <script>
+    const pdfPaths = pdfFiles
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line);
+
+    const elSelect = document.getElementById('file-selection');
+
+    pdfPaths.map(path => {
+      var option = document.createElement('option');
+      option.text = "\u266B " + path.substring(path.lastIndexOf("/") + 1);
+      option.setAttribute('value', path)
+      elSelect.appendChild(option);
+    })
+
+    function newSong(filePath) {
+      event.preventDefault();
+
+      pdfDisplayOpts = "#toolbar=1&zoom=FitW";
+      document.getElementById("pdf-iframe").setAttribute('src', filePath + pdfDisplayOpts);
+      console.log('File Path:', filePath);
+    }
+  </script>
+
+  <script>
+    function onMIDISuccess(midiAccess) {
+      console.log("onMIDISuccess")
+      console.log(midiAccess);
+
+      var inputs = midiAccess.inputs;
+      var outputs = midiAccess.outputs;
+    }
+
+    function onMIDIFailure() {
+      console.log('Could not access your MIDI devices.');
+    }
+
+    if (navigator.requestMIDIAccess) {
+      console.log("requesting MIDI access")
+      navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+    } else {
+      alert('MIDI is not supported by this browser.');
+    }
+  </script>
+
+
+</body>
+
+</html>
