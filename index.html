@@ -5,48 +5,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>PDF.js Viewer with MIDI Control</title>
+  <title>Sheet music viewer with MIDI control</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    select {
-      width: 50%;
-      padding: 5px 20px;
-      margin: 8px 25%;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    option {
-      padding: 12px 20px;
-      margin: 8px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    #error-message {
-      color: red;
-      margin: none;
-      text-align: center;
-    }
+  <link rel="stylesheet" href="style.css">
   </style>
 </head>
 
 <body>
   <div>
     <!-- <label for="file-selection">Choose a car:</label> -->
-    <select id="file-selection" name="file-selection" onchange="newSong(event.target.value)">
-      <option selected>Select a song...</option>
+    <select id="file-selection" name="file-selection" onchange="newSong(event.target.value); event.preventDefault();">
+      <option selected>Select a song... </option>
     </select>
+
+    <input type="file" id="fileInput" style="display: inline-block" />
+
   </div>
   <div id="error-message">&nbsp;</div>
 
@@ -60,6 +33,7 @@
   </div>
 
   <script src="pdf-files.js"></script>
+
   <script>
     const pdfPaths = pdfFiles
       .split('\n')
@@ -76,12 +50,19 @@
     })
 
     function newSong(filePath) {
-      event.preventDefault();
-
       pdfDisplayOpts = "#toolbar=1&zoom=FitW";
       document.getElementById("pdf-iframe").setAttribute('src', filePath + pdfDisplayOpts);
-      console.log('File Path:', filePath);
     }
+
+
+    const aboutHTML = `
+      <h1>About</h1>
+      <p>This is a simple web-based sheet music viewer that can be controlled via MIDI messages.</p>
+    `
+
+    const aboutHTML_dataURI = `data:text/html;base64,${btoa(unescape(encodeURIComponent(aboutHTML)))}`
+
+    newSong(aboutHTML_dataURI)
   </script>
 
   <script>
@@ -92,7 +73,7 @@
 
     let inMessage = false;
     let songName = null;
-  
+
     function selectSong(songName) {
       const elSelect = document.getElementById('file-selection');
       let found = false;
@@ -163,6 +144,25 @@
     } else {
       alert('MIDI is not supported by this browser.');
     }
+  </script>
+
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        // const filename = file.name
+        // const filetype = file.type
+        // console.log(file)
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          console.log('onload()');
+          const fileContent = e.target.result;
+          newSong(fileContent);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
   </script>
 
 
