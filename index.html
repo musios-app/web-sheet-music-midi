@@ -32,6 +32,12 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
+
+    #error-message {
+      color: red;
+      margin: none;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -42,6 +48,7 @@
       <option selected>Select a song...</option>
     </select>
   </div>
+  <div id="error-message">&nbsp;</div>
 
   <div class="row">
     <div style="height: calc(99vh - 45px)" class="col-sm-12">
@@ -78,16 +85,76 @@
   </script>
 
   <script>
-    function onMIDISuccess(midiAccess) {
-      console.log("onMIDISuccess")
-      console.log(midiAccess);
+    let pdfMidiDevice = "IAC Driver PDFBrowser"
 
-      var inputs = midiAccess.inputs;
-      var outputs = midiAccess.outputs;
+    let _midiAccess = null;
+    let _pdfDevice = null;
+
+    let inMessage = false;
+    let songName = null;
+  
+    function selectSong(songName) {
+      const elSelect = document.getElementById('file-selection');
+      let found = false;
+
+      for (const option of elSelect.options) {
+        const filename = option.value.substring(option.value.lastIndexOf('/') + 1);
+
+        if (filename.trim().toLowerCase().startsWith(songName.trim().toLowerCase())) {
+          console.log(`Found song: ${songName}`);
+          elSelect.value = option.value;
+          newSong(option.value);
+          found = true;
+          document.getElementById("error-message").innerHTML = "&nbsp;";
+          break;
+        }
+      }
+
+      if (!found) {
+        document.getElementById("error-message").innerText = "Song not found: " + songName;
+      }
+    }
+
+    function processEvent(message) {
+      // console.log(message);
+      if (message.data[0] === 0xB0 && message.data[1] === 110 && message.data[2] === 0x7F) {
+        inMessage = true;
+        songName = "";
+        console.log("Start new song name");
+      }
+      else if (message.data[0] === 0xB0 && message.data[1] === 110 && message.data[2] === 0x00) {
+        inMessage = false;
+        console.log("Song name: " + songName);
+        selectSong(songName);
+      }
+      else if (message.data[0] === 0xB0 && message.data[1] === 111) {
+        songName += String.fromCharCode(message.data[2]);
+        // console.log("appended: " + songName)
+      }
+    }
+
+
+    function onMIDISuccess(midiAccess) {
+      _midiAccess = midiAccess;
+
+      console.log("onMIDISuccess")
+      console.log(_midiAccess);
+
+      _midiAccess.inputs.forEach(input => {
+        if (input.name === pdfMidiDevice) {
+          _pdfDevice = input;
+          // console.log("PDF Device found");
+          // console.log(input);
+          input.onmidimessage = (message) => {
+            processEvent(message);
+          };
+        }
+      });
     }
 
     function onMIDIFailure() {
-      console.log('Could not access your MIDI devices.');
+      alert('ERROR: could not access MIDI devices');
+      console.error('ERROR: could not access MIDI devices');
     }
 
     if (navigator.requestMIDIAccess) {
