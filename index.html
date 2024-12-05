@@ -13,7 +13,7 @@
 
 <body>
   <div class="header">
-    <div class="title">Sheet Viewer by Musios</div>
+    <div class="title">Sheet Viewer by musios.app</div>
 
     <div>
       <select id="file-selection" name="file-selection" onchange="showSheet(event.target.value); event.preventDefault();">
@@ -30,15 +30,13 @@
 
 
   </div>
-  <div id="error-message">&nbsp;</div>
+  
+  <div id="error-message" style="display: none">&nbsp;</div>
 
-  <div class="row">
-    <div style="height: calc(99vh - 80px); padding: 10px 10px;" class="col-sm-12">
-      <iframe id="pdf-iframe" style="background-color: white; border: solid 1px grey; height: 100%; width: 100%" toolbar="0" view="FitW">
-      </iframe>
-    </div>
+  <div class="sheet-wrapper">
+      <iframe id="pdf-iframe"></iframe>
   </div>
-  </div>
+
 
   <script src="script/droparea.js"></script>
   <script src="script/midi-sheet-request.js"></script>
@@ -83,7 +81,18 @@
 
   <script>
     function showSheet(filename) {
-      const pdfDisplayOpts = "#toolbar=1&zoom=FitW";
+      // Display parameters: https://pdfobject.com/pdf/pdf_open_parameters_acro8.pdf
+      //
+      // view=FitH | FitV, FitR, FitB, FitBH, FitBV
+      // zoom=nn%
+      // 
+      // navpanes=1 | 0
+      // toolbar=1 | 0
+      // toolbar: 0, 1, 2 top|bottom|both|none
+      //
+      // scrollbar=1|0
+
+      const pdfDisplayOpts = "#view=FitB&toolbar=1";
 
       if (filename.startsWith('data:')) {
         document.getElementById("pdf-iframe").setAttribute('src', filename + pdfDisplayOpts);
@@ -107,7 +116,7 @@
           </style>
         </head>
         <body>
-          <h1>Sheet Viewer by Musios</h1>
+          <h1>Sheet Viewer by musios.app</h1>
           <p>This is a simple web-based sheet music viewer that can be controlled via MIDI messages.</p>
         </body>
       </html>
