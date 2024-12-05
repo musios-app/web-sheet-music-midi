@@ -13,16 +13,11 @@
 
 <body>
   <div>
-    <div style="display: inline-block; width: 100px;">Drop a file here</div>
-
-    <!-- <label for="file-selection">Choose a car:</label> -->
     <select id="file-selection" name="file-selection" onchange="newSong(event.target.value); event.preventDefault();">
       <option selected>Select a song... </option>
     </select>
 
     <div id="droparea" style="display: inline-block; width: 100px; border: solid 1px black; background-color: #ddd;">Drop a file here</div>
-
-
     <!-- <input type="file" id="fileInput" style="display: inline-block" /> -->
 
   </div>
@@ -108,7 +103,6 @@
     }
 
     function processEvent(message) {
-      // console.log(message);
       if (message.data[0] === 0xB0 && message.data[1] === 110 && message.data[2] === 0x7F) {
         inMessage = true;
         songName = "";
@@ -121,7 +115,6 @@
       }
       else if (message.data[0] === 0xB0 && message.data[1] === 111) {
         songName += String.fromCharCode(message.data[2]);
-        // console.log("appended: " + songName)
       }
     }
 
@@ -135,8 +128,6 @@
       _midiAccess.inputs.forEach(input => {
         if (input.name === pdfMidiDevice) {
           _pdfDevice = input;
-          // console.log("PDF Device found");
-          // console.log(input);
           input.onmidimessage = (message) => {
             processEvent(message);
           };
