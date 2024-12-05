@@ -49,8 +49,8 @@ Important: the names of the Songs in your setlist must match the start of filena
 ```gpscript
 var pdfDeviceName : String = "IAC Driver PDFBrowser"
 
-
 Function HexCharToInteger(char : String) Returns Integer
+    // There has to be a better way to do this!
     If    char == "0" Then result = 0
     Elsif char == "1" Then result = 1
     Elsif char == "2" Then result = 2
@@ -125,3 +125,5 @@ End
   * Maybe MuseScore, MusicXML
   * Maybe MIDI file support
   * Maybe Word and Excel
+* Downloadable offline app
+
