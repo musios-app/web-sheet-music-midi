@@ -13,12 +13,17 @@
 
 <body>
   <div>
+    <div style="display: inline-block; width: 100px;">Drop a file here</div>
+
     <!-- <label for="file-selection">Choose a car:</label> -->
     <select id="file-selection" name="file-selection" onchange="newSong(event.target.value); event.preventDefault();">
       <option selected>Select a song... </option>
     </select>
 
-    <input type="file" id="fileInput" style="display: inline-block" />
+    <div id="droparea" style="display: inline-block; width: 100px; border: solid 1px black; background-color: #ddd;">Drop a file here</div>
+
+
+    <!-- <input type="file" id="fileInput" style="display: inline-block" /> -->
 
   </div>
   <div id="error-message">&nbsp;</div>
@@ -33,6 +38,12 @@
   </div>
 
   <script src="pdf-files.js"></script>
+  <script src="droparea.js"></script>
+  <script>
+    setDropArea(document.getElementById('droparea'), (filename, filetype, dataURI) => {
+      newSong(dataURI);
+    })
+  </script>
 
   <script>
     const pdfPaths = pdfFiles
@@ -145,26 +156,6 @@
       alert('MIDI is not supported by this browser.');
     }
   </script>
-
-  <script>
-    document.getElementById('fileInput').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (file) {
-        // const filename = file.name
-        // const filetype = file.type
-        // console.log(file)
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          console.log('onload()');
-          const fileContent = e.target.result;
-          newSong(fileContent);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  </script>
-
 
 </body>
 
