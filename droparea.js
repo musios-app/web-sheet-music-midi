@@ -13,22 +13,27 @@ function setDropArea(el, callback) {
         event.preventDefault();
         el.classList.remove('hover');
 
-        const file = event.dataTransfer.files[0];
+        // console.log(event.dataTransfer.files);
 
-        if (file) {
-            const validTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain'];
-            if (!validTypes.includes(file.type)) {
-                alert('PDF, images and text files are supported. Images as JPEG or PNG.');
-                return false;
-            }
+        [...event.dataTransfer.files]
+            .filter(file => file)
+            .forEach(file => {
+                // console.log("file:", file);
+                if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-            //   console.log('onload()');
-              const dataURI = e.target.result;
-              callback(file.name, file.type, dataURI);
-            };
-            reader.readAsDataURL(file);
-        }
+                const validTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain'];
+                if (!validTypes.includes(file.type)) {
+                    alert('PDF, images and text files are supported. Images as JPEG or PNG.');
+                    return
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const dataURI = e.target.result;
+                    callback(file.name, file.type, dataURI);
+                };
+
+                reader.readAsDataURL(file);
+            });
     });
 }

@@ -4,29 +4,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuNy4xIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDI0IEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMzg0IDMxLjFDMzg0IDEzLjkgMzcwLjEgMCAzNTIuOSAwYy0yLjcgMC01LjMgLjMtNy45IDFMMTkzLjkgNDAuOEMxODMuMyA0My42IDE3NiA1My4xIDE3NiA2NGwwIDMwMi4zYy0xOC4xLTktNDAuMi0xNC4zLTY0LTE0LjNDNTAuMSAzNTIgMCAzODcuOCAwIDQzMnM1MC4xIDgwIDExMiA4MHMxMTItMzUuOCAxMTItODBsMC0yMzYuNiAxNDEuOS0zNi4xQzM3Ni42IDE1Ni42IDM4NCAxNDcgMzg0IDEzNmwwLTEwNC45ek0xNzYgNDMyYzAgMi42LTEuNCA5LjQtMTIuNyAxNy41Yy0xMS4yIDgtMjkuMiAxNC41LTUxLjMgMTQuNXMtNDAuMS02LjUtNTEuMy0xNC41QzQ5LjQgNDQxLjQgNDggNDM0LjYgNDggNDMyczEuNC05LjQgMTIuNy0xNy41YzExLjItOCAyOS4yLTE0LjUgNTEuMy0xNC41czQwLjEgNi41IDUxLjMgMTQuNWMxMS4zIDguMSAxMi43IDE0LjkgMTIuNyAxNy41ek0zMzYgMTE3LjNMMjI0IDE0NS44bDAtNjMuM0wzMzYgNTNsMCA2NC4zeiIvPjwvc3ZnPg==" type="image/svg+xml">
 
   <title>Sheet music viewer with MIDI control</title>
 
-  <link rel="stylesheet" href="style.css">
-  </style>
+  <link rel="stylesheet" href="style.css"></link>
 </head>
 
 <body>
-  <div>
-    <select id="file-selection" name="file-selection" onchange="newSong(event.target.value); event.preventDefault();">
-      <option selected>Select a song... </option>
-    </select>
+  <div class="header">
+    <div class="title">Sheet Viewer by Musios</div>
 
-    <div id="droparea" style="display: inline-block; width: 100px; border: solid 1px black; background-color: #ddd;">Drop a file here</div>
-    <!-- <input type="file" id="fileInput" style="display: inline-block" /> -->
+    <div>
+      <select id="file-selection" name="file-selection" onchange="showSheet(event.target.value); event.preventDefault();">
+        <option selected>-- Upload your sheet music --</option>
+      </select>
+    </div>
+
+    <div id="droparea">
+      <svg height=20 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc. --><path d="M64 480l232.2 0c9.8 11.8 21 22.3 33.5 31.3c-3.2 .5-6.4 .7-9.7 .7L64 512c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L220.1 0c12.7 0 24.9 5.1 33.9 14.1L369.9 129.9c9 9 14.1 21.2 14.1 33.9l0 34.7c-11.2 3.2-21.9 7.4-32 12.6l0-19.2-112 0c-26.5 0-48-21.5-48-48l0-112L64 32C46.3 32 32 46.3 32 64l0 384c0 17.7 14.3 32 32 32zM351.5 160c-.7-2.8-2.1-5.4-4.2-7.4L231.4 36.7c-2.1-2.1-4.6-3.5-7.4-4.2L224 144c0 8.8 7.2 16 16 16l111.5 0zM544 368a112 112 0 1 0 -224 0 112 112 0 1 0 224 0zm-256 0a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm160-64l0 48 48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-48 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48-48 0c-8.8 0-16-7.2-16-16s7.2-16 16-16l48 0 0-48c0-8.8 7.2-16 16-16s16 7.2 16 16z"/></svg>
+      Drop sheet files here or... 
+      
+      <input type="file" id="fileInput" name="fileInput"/>
+    </div>
+
 
   </div>
   <div id="error-message">&nbsp;</div>
 
   <div class="row">
-    <div style="height: calc(99vh - 45px)" class="col-sm-12">
-      <iframe id="pdf-iframe" height="100%" width="100%" toolbar="0" view="FitW">
-        Select a song
+    <div style="height: calc(99vh - 80px); padding: 10px 10px;" class="col-sm-12">
+      <iframe id="pdf-iframe" style="background-color: white; border: solid 1px grey; height: 100%; width: 100%" toolbar="0" view="FitW">
       </iframe>
     </div>
   </div>
@@ -34,52 +42,84 @@
 
   <script src="pdf-files.js"></script>
   <script src="droparea.js"></script>
+  <script src="midi-sheet-request.js"></script>
+
+  <script src="musios-sheet-storage.js"></script>
   <script>
+    function updateMenu() {
+      const elSelect = document.getElementById('file-selection');
+
+      sheetData.getSheetNames(filenames => {
+        if (!filenames || filenames.length === 0)
+          elSelect.innerHTML = '<option selected>Upload your sheet music...</option>';
+        else {
+          elSelect.innerHTML = '<option selected>Select sheet music...</option>';
+
+          filenames.forEach(filename => {
+            var option = document.createElement('option');
+            option.text = filename;
+            option.setAttribute('value', filename)
+            elSelect.appendChild(option);
+          })
+        }
+      })
+    }
+
+    sheetData.init(() => {
+      // console.log('Sheet data initialized');
+      updateMenu()
+    }, (error) => {
+      console.error(error);
+    });
+    
     setDropArea(document.getElementById('droparea'), (filename, filetype, dataURI) => {
-      newSong(dataURI);
+      sheetData.addSheet(filename, filetype, dataURI, () => {
+        updateMenu();
+        showSheet(dataURI);
+      }, (error) => {
+        console.error(error);
+      });
     })
   </script>
 
   <script>
-    const pdfPaths = pdfFiles
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => line);
+    function showSheet(filename) {
+      const pdfDisplayOpts = "#toolbar=1&zoom=FitW";
 
-    const elSelect = document.getElementById('file-selection');
-
-    pdfPaths.map(path => {
-      var option = document.createElement('option');
-      option.text = "\u266B " + path.substring(path.lastIndexOf("/") + 1);
-      option.setAttribute('value', path)
-      elSelect.appendChild(option);
-    })
-
-    function newSong(filePath) {
-      pdfDisplayOpts = "#toolbar=1&zoom=FitW";
-      document.getElementById("pdf-iframe").setAttribute('src', filePath + pdfDisplayOpts);
+      if (filename.startsWith('data:')) {
+        document.getElementById("pdf-iframe").setAttribute('src', filename + pdfDisplayOpts);
+      }
+      else {
+        const dataURI = sheetData.getSheet(filename,
+          sheet => document.getElementById("pdf-iframe").setAttribute('src', sheet.data + pdfDisplayOpts),
+          error => console.error(error)
+        );
+      }
     }
 
-
     const aboutHTML = `
-      <h1>About</h1>
-      <p>This is a simple web-based sheet music viewer that can be controlled via MIDI messages.</p>
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Sheet Viewer by Musios</h1>
+          <p>This is a simple web-based sheet music viewer that can be controlled via MIDI messages.</p>
+        </body>
+      </html>
     `
 
     const aboutHTML_dataURI = `data:text/html;base64,${btoa(unescape(encodeURIComponent(aboutHTML)))}`
 
-    newSong(aboutHTML_dataURI)
+    showSheet(aboutHTML_dataURI)
   </script>
 
   <script>
-    let pdfMidiDevice = "IAC Driver PDFBrowser"
-
-    let _midiAccess = null;
-    let _pdfDevice = null;
-
-    let inMessage = false;
-    let songName = null;
-
     function selectSong(songName) {
       const elSelect = document.getElementById('file-selection');
       let found = false;
@@ -88,9 +128,9 @@
         const filename = option.value.substring(option.value.lastIndexOf('/') + 1);
 
         if (filename.trim().toLowerCase().startsWith(songName.trim().toLowerCase())) {
-          console.log(`Found song: ${songName}`);
+          // console.log(`Found song: ${songName}`);
           elSelect.value = option.value;
-          newSong(option.value);
+          showSheet(option.value);
           found = true;
           document.getElementById("error-message").innerHTML = "&nbsp;";
           break;
@@ -101,51 +141,15 @@
         document.getElementById("error-message").innerText = "Song not found: " + songName;
       }
     }
+  </script>
 
-    function processEvent(message) {
-      if (message.data[0] === 0xB0 && message.data[1] === 110 && message.data[2] === 0x7F) {
-        inMessage = true;
-        songName = "";
-        console.log("Start new song name");
-      }
-      else if (message.data[0] === 0xB0 && message.data[1] === 110 && message.data[2] === 0x00) {
-        inMessage = false;
-        console.log("Song name: " + songName);
-        selectSong(songName);
-      }
-      else if (message.data[0] === 0xB0 && message.data[1] === 111) {
-        songName += String.fromCharCode(message.data[2]);
-      }
-    }
+  <script>
+    const pdfMidiDevice = "IAC Driver PDFBrowser"
 
-
-    function onMIDISuccess(midiAccess) {
-      _midiAccess = midiAccess;
-
-      console.log("onMIDISuccess")
-      console.log(_midiAccess);
-
-      _midiAccess.inputs.forEach(input => {
-        if (input.name === pdfMidiDevice) {
-          _pdfDevice = input;
-          input.onmidimessage = (message) => {
-            processEvent(message);
-          };
-        }
-      });
-    }
-
-    function onMIDIFailure() {
-      alert('ERROR: could not access MIDI devices');
-      console.error('ERROR: could not access MIDI devices');
-    }
-
-    if (navigator.requestMIDIAccess) {
-      console.log("requesting MIDI access")
-      navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
-    } else {
-      alert('MIDI is not supported by this browser.');
-    }
+    initMidiSheetRequest(
+      pdfMidiDevice,
+      songName => selectSong(songName)
+    )
   </script>
 
 </body>
