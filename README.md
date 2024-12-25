@@ -14,7 +14,7 @@ Why a web app? Because it's so flexible.
 
 ## How to use standalone
 
-1. Go to: https://www.musios.app/project/web-sheet-music-midi
+1. Go to: https://www.musios.app/projects/web-sheet-music-midi
 2. Drag and drop PDF and/or image files onto the drop panel (top right)
 3. Select sheet music from the drop-down list (top center)
 
