@@ -1,3 +1,9 @@
+---
+layout: default
+title: Sheet Music Viewer with MIDI Control
+description: (WIP) Build a browser-based viewer for charts and sheet music that is controlled by MIDI
+---
+
 # Sheet Music Viewer with MIDI Control by musios.app
 
 ## Goals
