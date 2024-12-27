@@ -2,6 +2,8 @@
 layout: default
 title: Sheet Music Viewer with MIDI Control
 description: (WIP) Build a browser-based viewer for charts and sheet music that is controlled by MIDI
+tags: utility gig-performer charts sheet-music
+gitrepo: https://github.com/musios-app/web-sheet-music-midi
 ---
 
 # Sheet Music Viewer with MIDI Control by musios.app
