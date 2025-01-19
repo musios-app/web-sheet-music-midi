@@ -8,29 +8,48 @@ gitrepo: https://github.com/musios-app/web-sheet-music-midi
 
 # Sheet Music Viewer with MIDI Control by musios.app
 
-## Goals
+<div class="alert alert-warning" role="alert">
+<b>Work In Progress</b>
 
-The goal is a useful viewer for rehearsing and playing live.
+This is an early version. I've been using it for rehearsals without issue but won't use it live quite yet.
 
-0. Simplicity
-1. Display sheet music in a web browser
-2. Support a reasonable variety of file formats (starting with PDF and images)
-3. Select sheet music with MIDI control
+I'll consider it "good enough" when the doc is better, it's been tested in more browsers, been tested on Windows and Mac. 
+
+It could benefit from PC controls, song orders & numbers and other normal MIDI song change details.
+</div>
+
+## Purpose
+
+The goal is a simple, useful viewer for rehearsing and playing live.
+
+1. Display sheet music, charts, song lists and other content in a web browser
+2. Support a reasonable variety of file formats.  PDF and images are first. After that consider Chord Pro.
+3. Select sheet music with MIDI controls
 4. Support offline usage
 
-Why a web app? Because it's so flexible.
+Why a web app? Because it's so flexible (and easy to develop).
+
 
 ## How to use standalone
 
+<div class="alert alert-warning" role="alert">
+<b>Oops - not working at the moment</b>
+I'm migrating content to the site <a href="https://musios.app">musios.app</a> and haven't set up the operational version yet.
+</div>
+
+<div style="display: none">
 1. Go to: https://www.musios.app/projects/web-sheet-music-midi
 2. Drag and drop PDF and/or image files onto the drop panel (top right)
 3. Select sheet music from the drop-down list (top center)
+</s>
 
 Notes:
 
 * It's easier to use if your filenames are clear. e.g. "In Your Eyes - Peter Gabriel.pdf"
 * The uploads are stored in your browser's local storage. You don't need to upload the files for each session.
 * Current supported file formats are PDF, PNG, and JPEG.
+</div>
+
 
 ## How to use with MIDI Control - Gig Performer / Mac
 
@@ -54,31 +73,14 @@ Important: the names of the Songs in your setlist must match the start of filena
 * "In Your Eyes - Peter Gabriel.pdf"
 * "In Your Eyes - Peter Gabriel - live version with cellos.pdf"
 
-```gpscript
+```
 var pdfDeviceName : String = "IAC Driver PDFBrowser"
 
-Function HexCharToInteger(char : String) Returns Integer
-    // There has to be a better way to do this!
-    If    char == "0" Then result = 0
-    Elsif char == "1" Then result = 1
-    Elsif char == "2" Then result = 2
-    Elsif char == "3" Then result = 3
-    Elsif char == "4" Then result = 4
-    Elsif char == "5" Then result = 5
-    Elsif char == "6" Then result = 6
-    Elsif char == "7" Then result = 7
-    Elsif char == "8" Then result = 8
-    Elsif char == "9" Then result = 9
-    Elsif char == "A" || char == "a" Then result = 10
-    Elsif char == "B" || char == "b" Then result = 11
-    Elsif char == "C" || char == "c" Then result = 12
-    Elsif char == "D" || char == "d" Then result = 13
-    Elsif char == "E" || char == "e" Then result = 14
-    Elsif char == "F" || char == "f" Then result = 15
-    Else result = 16
-    End
-End
 
+Function HexCharToInteger(char : String) Returns Integer
+  Const HexString : String = "0123456789ABCDEF"
+  result = IndexOfSubstring(HexString, char, False)
+End
 
 Function SendSongNameToPDFBrowser(deviceName : String, songNumber : Integer, songName : String)
     Var
@@ -87,7 +89,6 @@ Function SendSongNameToPDFBrowser(deviceName : String, songNumber : Integer, son
         byte : Integer
         msg : ControlChangeMessage 
         concat : String = ""
-
 
     // Start message
     SendNowToMidiOutDevice(deviceName, MakeControlChangeMessage(110, 127))
@@ -112,6 +113,17 @@ On Song(oldSongIndex : integer, newSongIndex : integer)
     SendSongNameToPDFBrowser(pdfDeviceName, newSongIndex, GetSongName(newSongIndex))
 End
 ```
+
+
+## Security and running on localhost
+
+This application uses MIDI to receive commands to change sheets.
+There are security requirements for all browser MIDI access to be via HTTPS.
+This means that the app cannot be run (a) as a file:// URL or (b) on a localhost web server without HTTPS.
+
+To run on localhost, you can use a tool like [http-server](https://github.com/http-party/http-server#readme) which will serve the files over HTTPS.
+
+A localhost version also has the advantage that no internet access is needed during a rehearsal or performance.
 
 
 ## Roadmap
