@@ -1,75 +1,226 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuNy4xIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDI0IEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMzg0IDMxLjFDMzg0IDEzLjkgMzcwLjEgMCAzNTIuOSAwYy0yLjcgMC01LjMgLjMtNy45IDFMMTkzLjkgNDAuOEMxODMuMyA0My42IDE3NiA1My4xIDE3NiA2NGwwIDMwMi4zYy0xOC4xLTktNDAuMi0xNC4zLTY0LTE0LjNDNTAuMSAzNTIgMCAzODcuOCAwIDQzMnM1MC4xIDgwIDExMiA4MHMxMTItMzUuOCAxMTItODBsMC0yMzYuNiAxNDEuOS0zNi4xQzM3Ni42IDE1Ni42IDM4NCAxNDcgMzg0IDEzNmwwLTEwNC45ek0xNzYgNDMyYzAgMi42LTEuNCA5LjQtMTIuNyAxNy41Yy0xMS4yIDgtMjkuMiAxNC41LTUxLjMgMTQuNXMtNDAuMS02LjUtNTEuMy0xNC41QzQ5LjQgNDQxLjQgNDggNDM0LjYgNDggNDMyczEuNC05LjQgMTIuNy0xNy41YzExLjItOCAyOS4yLTE0LjUgNTEuMy0xNC41czQwLjEgNi41IDUxLjMgMTQuNWMxMS4zIDguMSAxMi43IDE0LjkgMTIuNyAxNy41ek0zMzYgMTE3LjNMMjI0IDE0NS44bDAtNjMuM0wzMzYgNTNsMCA2NC4zeiIvPjwvc3ZnPg==" type="image/svg+xml">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" type="image/png" href="/assets/images/musios-logo-black-circle.png"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Web Sheet Music Viewer | musios.app</title>
 
-  <title>Sheet Viewer with MIDI control by musios.app</title>
+  <meta property="og:title" content="Web Sheet Music Viewer | musios.app" />
+  <meta property="og:locale" content="en" />
+  <meta name="description" content="A collection of tools for music creators and performers" />
+  <meta property="og:description" content="A collection of tools for music creators and performers" />
+  <meta property="og:url" content="https://localhost:4000/" />
+  <meta property="og:site_name" content="musios.app" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="musios.app Home" />
+  <meta name="author" content="Andrew Hunt (musios)" />
 
-  <link rel="stylesheet" href="style/style.css"></link>
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"Andrew Hunt (musios)"},"description":"A collection of tools for music creators and performers","headline":"musios.app Home","name":"musios.app","url":"https://localhost:4000/"}
+  </script>
+
+  <!-- Material Design for Bootstrap -->
+  <link href="assets/mdb/mdb.min.css" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.min.css">
+  <link rel="stylesheet" href="assets/bootstrap-table/extensions/reorder-rows/bootstrap-table-reorder-rows.css">
+
+  <link href="assets/css/sheetviewer.css" rel="stylesheet"/>
+
+  <!-- Google tag (gtag.js) -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TE1EYGTYEW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TE1EYGTYEW');
+  </script>
+  -->
+
 </head>
 
 <body>
-  <div class="header">
-    <div class="title">Sheet Viewer by musios.app</div>
 
-    <div>
-      <select id="file-selection" name="file-selection" onchange="showSheet(event.target.value); event.preventDefault();">
-        <option selected>-- Upload your sheet music --</option>
-      </select>
+<div class="container-fluid">
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+          <img src="assets/images/musios-logo-blue-circle.svg" alt="musios.app logo">
+        </a>
+
+        <div class="collapse navbar-collapse">
+          <div class="navbar-nav me-auto text-primary">
+            Sheet Music Viewer - musios.app
+          </div>
+
+          <div class="navbar-nav me-auto">
+            <a data-mdb-dropdown-init class="btn btn-outline-secondary dropdown-toggle" href="#" id="file-selection" role="button" aria-expanded="false">
+              Select Song
+            </a>
+            <ul id="file-selection-list" class="dropdown-menu" aria-labelledby="file-selection">
+              <li>
+                <a class="dropdown-item">No sheet music files found</a> 
+              </li>
+            </ul>
+          </div>
+
+          <div class="navbar-nav view-selection">
+            <div class="btn-group">
+              <input type="radio" class="btn-check" name="viewOptions" id="managerMode" autocomplete="off" autocompleted="" onchange="viewChange(event.target.id)" checked>
+              <label class="btn btn-outline-secondary" for="managerMode" data-mdb-ripple-init="">Manager</label>
+
+              <input type="radio" class="btn-check" name="viewOptions" id="viewerMode" autocomplete="off" autocompleted="" onchange="viewChange(event.target.id)">
+              <label class="btn btn-outline-secondary" for="viewerMode" data-mdb-ripple-init="">Viewer</label>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <section class="error">
+    <div id="error-message" style="display: none">&nbsp; some kind of error</div>
+  </section>
+
+  <section id="display-selector">
+
+    <div class="display-manager sheet-manager">
+      <div class="row">
+        <div class="col-3">
+          <div id="droparea">
+            <h5 class="card-title text-center">Add Sheet Music</h5>
+
+            <div style="border: 2px dashed #ccc; padding: 20px; text-align: center;">
+              <p class="text-center">Drag and drop files here</p>
+              <img src="assets/images/music-file-icon.png" height=100/>
+            </div>
+            
+            <p class="text-center my-2">OR</p>
+
+            <div class="py-2" style="border: 2px dashed #ccc; text-align: center;">
+              <label for="fileInput" class="btn btn-outline-secondary">Choose file(s)</label>
+              <input type="file" id="fileInput" name="fileInput" style="display: none;" multiple />
+            </div>
+          </div>
+
+          <!-- <div>
+            Supported file types:
+            <ul>
+              <li>PDF</li>
+            </ul>
+          </div> -->
+        </div>
+
+
+        <div class="col-9">
+          <div id="manage-area">
+            <h5 class="card-title text-center">Manage Sheet Music</h5>
+
+            <table
+              width="50%"
+              id="sheet-music-table"
+              data-pagination="false"
+              data-search="false"
+              data-show-toggle="true"
+              data-custom-sort="customSort"
+              data-toolbar="false"
+              data-use-row-attr-func="true"
+              data-reorderable-rows="true"
+            >
+            
+              <thead>
+                <tr>
+                  <th data-field="drag" data-checkbox="false">Order</th>
+                  <!-- <th data-field="state" data-checkbox="true">Toggle</th> -->
+                  <th data-field="view" data-checkbox="false">View</th>
+                  <th data-field="songname" data-sortable="true">Song name</th>
+                  <th data-field="filename" data-sortable="true">Filename</th>
+                  <th data-field="type" data-sortable="true">Type</th>
+                  <th data-field="size" data-sortable="true">Size</th>
+                </tr>
+              </thead>
+              <tbody>
+            
+              </tbody>
+            </table>
+          
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-    <div id="droparea">
-      <svg height=20 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-        <!--! Font Awesome Pro 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc. -->
-        <path d="M64 480l232.2 0c9.8 11.8 21 22.3 33.5 31.3c-3.2 .5-6.4 .7-9.7 .7L64 512c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L220.1 0c12.7 0 24.9 5.1 33.9 14.1L369.9 129.9c9 9 14.1 21.2 14.1 33.9l0 34.7c-11.2 3.2-21.9 7.4-32 12.6l0-19.2-112 0c-26.5 0-48-21.5-48-48l0-112L64 32C46.3 32 32 46.3 32 64l0 384c0 17.7 14.3 32 32 32zM351.5 160c-.7-2.8-2.1-5.4-4.2-7.4L231.4 36.7c-2.1-2.1-4.6-3.5-7.4-4.2L224 144c0 8.8 7.2 16 16 16l111.5 0zM544 368a112 112 0 1 0 -224 0 112 112 0 1 0 224 0zm-256 0a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm160-64l0 48 48 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-48 0 0 48c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-48-48 0c-8.8 0-16-7.2-16-16s7.2-16 16-16l48 0 0-48c0-8.8 7.2-16 16-16s16 7.2 16 16z"/>
-      </svg>
-      Drop sheet files here or... 
-      
-      <input type="file" id="fileInput" name="fileInput"/>
-    </div>
-    
-  </div>
-  
-  <div id="error-message" style="display: none">&nbsp;</div>
 
-  <div class="sheet-wrapper">
+    <div class="display-viewer sheet-wrapper">
       <iframe id="pdf-iframe"></iframe>
   </div>
+  </section>
 
 
-  <script src="script/droparea.js"></script>
-  <script src="script/midi-sheet-request.js"></script>
-  <script src="script/musios-sheet-storage.js"></script>
+
+
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Material Design for Bootstrap -->
+  <script type="text/javascript" src="assets/mdb/mdb.umd.min.js"></script>
+
+  <script src="assets/TableDnD/jquery.tablednd.1.0.5.min.js"></script>
+  <script src="assets/bootstrap-table/bootstrap-table.min.js"></script>
+  <script src="assets/bootstrap-table/extensions/reorder-rows/bootstrap-table-reorder-rows.min.js"></script>
+
+  <!-- Custom scripts -->
+  <script src="assets/js/droparea.js"></script>
+  <script src="assets/js/midi-sheet-request.js"></script>
+  <script src="assets/js/musios-sheet-storage.js"></script>
   
   <script>
+    <!-- scripts for management of the display -->
+
+    function viewChange(id) {
+      $("body .display-viewer").hide()
+      $("body .display-manager").hide()
+
+      if (id === "viewerMode") 
+        $(`body .display-viewer`).show()
+      else if (id === "managerMode") 
+        $(`body .display-manager`).show()
+    }
+
     function updateMenu() {
-      const elSelect = document.getElementById('file-selection');
+      const fileSelectionMenu = $("#file-selection")
+      const fileSelectionList = $('#file-selection-list')
 
       sheetData.getSheetNames(filenames => {
-        if (!filenames || filenames.length === 0)
-          elSelect.innerHTML = '<option selected>Upload your sheet music...</option>';
-        else {
-          elSelect.innerHTML = '<option selected>Select sheet music...</option>';
+        console.log(filenames)
+        if (!filenames || filenames.length === 0) {
+          fileSelectionMenu.addClass("disabled")
+          return
+        }x
 
-          filenames.forEach(filename => {
-            var option = document.createElement('option');
-            option.text = filename;
-            option.setAttribute('value', filename)
-            elSelect.appendChild(option);
-          })
-        }
+        fileSelectionList.empty()
+        fileSelectionMenu.removeClass("disabled")
+
+        const liItem = $(`<li><a class='dropdown-item' href='#'>${filename}</a></li>`)
+        fileSelectionList.append(liItem)
+
+        liItem.click(event => {
+          console.log(filename)
+        })
       })
     }
 
-    sheetData.init(() => {
-      // console.log('Sheet data initialized');
-      updateMenu()
-    }, (error) => {
-      console.error(error);
-    });
     
     setDropArea(document.getElementById('droparea'), (filename, filetype, dataURI) => {
       sheetData.addSheet(filename, filetype, dataURI, () => {
@@ -130,6 +281,7 @@
   </script>
 
   <script>
+    /*
     function selectSong(songName) {
       const elSelect = document.getElementById('file-selection');
       let found = false;
@@ -151,15 +303,142 @@
         document.getElementById("error-message").innerText = "Song not found: " + songName;
       }
     }
+    */
   </script>
 
   <script>
+    /*
     const pdfMidiDevice = "IAC Driver PDFBrowser"
 
     initMidiSheetRequest(
       pdfMidiDevice,
       songName => selectSong(songName)
     )
+    */
+  </script>
+
+
+  <script>
+    const supportedMediaTypes = {
+      "application/pdf": {
+        type: "PDF",
+        icon: "assets/images/fa-pdf.svg",
+      }
+    };
+
+    $(function() {
+      const tbody = $("#sheet-music-table tbody");
+
+      sheetData.getSheetNames(filenames => {
+        // console.log("filenames", filenames);
+
+        filenames.forEach(filename => {
+          sheetData.getSheet(filename, data => {
+            $('#sheet-music-table').bootstrapTable('insertRow', {
+              index: 1,
+              row: {
+                order: `<img src="assets/images/fa-bars.svg" height="20px"/>`,
+                view: `<img src="assets/images/fa-eye-regular.svg" height="20px"/>`,
+                filename: filename,
+                songname: filename,
+                type: `<!-- ${supportedMediaTypes[data.filetype].type} --> <img src="${supportedMediaTypes[data.filetype].icon}" height="20px"/>`,
+                size: data.data.length,
+              }
+            });
+          }, error => console.error(error));
+        });
+      });
+
+      $('#sheet-music-table').bootstrapTable({
+        dragHandle: '.reorder',
+        columns: [
+          {
+            title: 'Order',
+            field: 'order',
+            class: 'reorder'
+          },
+          {
+            title: 'View',
+            field: 'view',
+            class: 'view',
+            align: 'center'
+          },
+          {
+            title: 'Song name',
+            field: 'songname',
+            class: 'songname'
+          },
+          {
+            title: 'Filename',
+            field: 'filename',
+            class: 'filename'
+          },
+          {
+            title: 'Type',
+            field: 'type',
+            class: 'type',
+            align: 'center',
+          },
+          {
+            title: 'Size',
+            field: 'size',
+            class: 'size',
+            align: 'right',
+            formatter: function (value) {
+              if (value < 1024) return value + ' bytes';
+              value = value / 1024;
+              if (value < 1024) return Math.round(value) + 'KB';
+              value = value / 1024;
+              if (value < 1024) return Math.round(value) + 'MB';
+              value = value / 1024;
+              if (value < 1024) return Math.round(value) + 'GB';
+            }
+          },
+        ]
+      });
+    });
+
+    function customSort(sortName, sortOrder, data) {
+      console.log(sortName, sortOrder, data);
+
+      var order = sortOrder === 'desc' ? -1 : 1
+      data.sort(function (a, b) {
+        var aa = +((a[sortName] + '').replace(/[^\d]/g, ''))
+        var bb = +((b[sortName] + '').replace(/[^\d]/g, ''))
+
+        if (aa < bb) {
+          return order * -1
+        }
+        if (aa > bb) {
+          return order
+        }
+        return 0
+      })
+    }  
+  </script>
+
+
+
+
+  <script>
+    function initDisplay() {
+      console.log('Initializing viewer');
+
+      sheetData.init(() => {
+        console.log('Sheet data initialized');
+        viewChange("managerMode")
+        // updateMenu()
+      }, (error) => {
+        console.error(error);
+      });
+    }
+
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initDisplay)
+    } else {
+      initDisplay()  
+    }
   </script>
 
 </body>

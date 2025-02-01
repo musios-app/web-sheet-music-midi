@@ -1,0 +1,125 @@
+:root {
+  --header-height: 60px;
+}
+
+* {
+  font-family: Roboto, sans-serif;
+  color: #224;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0fa;
+}
+
+header {
+  height: var(--header-height);
+  /* border: solid 1px #ccc; */
+  padding: 4px 20px 4px 20px;
+}
+
+.navbar {
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  background-color: #f0f0ff !important;
+}
+
+.navbar img {
+  height: calc(var(--header-height) - 18px);
+}
+
+.view-selection input:checked + label.btn {
+  background-color: #007bff60;
+}
+
+#error-message {
+  color: red;
+  margin: none;
+  text-align: center;
+}
+
+
+
+.sheet-wrapper {
+  height: calc(100vh - (var(--header-height) + 8px) - 20px); 
+  width: 100%;
+  padding: 10px 10px;
+}
+
+.sheet-manager {
+  height: calc(100vh - (var(--header-height) + 8px) - 20px); 
+  width: 100%;
+  padding: 16px 24px;
+  background-color: #f8f8ff;
+}
+
+
+#pdf-iframe {
+  background-color: white;
+  border: solid 1px grey;
+  height: 100%;
+  width: 100%;
+}
+
+#droparea {
+  border: solid 1px black;
+  background-color: white; 
+  padding: 8px 20px; 
+  margin-right: 20px;
+  border-radius: 5px;
+}
+
+
+#manage-area {
+  border: solid 1px black;
+  background-color: white; 
+  padding: 8px 20px; 
+  margin-right: 20px;
+  border-radius: 5px;
+}
+
+#sheet-music-table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+#sheet-music-table tr {
+  margin-top: 12px;
+}
+
+#sheet-music-table tr td:first-child {
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  text-align: center;
+  padding: 0;
+}
+
+#sheet-music-table tr td:last-child {
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+#sheet-music-table th {
+  background-color: #e0e0f0;
+}
+
+#sheet-music-table td {
+  padding: 8px 12px;
+  background-color: #f0f0f8;
+}
+
+#sheet-music-table .reorder-rows-on-drag-class {
+  background-color: #d0d0ff;
+  box-shadow: 0 0 10px 0 blue;
+}
+
+#sheet-music-table .reorder-rows-on-drag-class td {
+  background-color: #d0d0ff;
+  box-shadow: none;
+}
+
+.fixed-table-toolbar { 
+  display: none;
+}
