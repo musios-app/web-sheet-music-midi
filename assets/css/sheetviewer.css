@@ -63,13 +63,25 @@ header {
   width: 100%;
 }
 
-#droparea {
+
+
+.add-sheet-music {
   border: solid 1px black;
   background-color: white; 
   padding: 8px 20px; 
   margin-right: 20px;
   border-radius: 5px;
 }
+
+.dropzone {
+  border: dashed 2px grey;
+  background-color: white; 
+  padding: 8px 20px; 
+  margin-right: 20px;
+  border-radius: 5px;
+}
+
+
 
 
 #manage-area {
