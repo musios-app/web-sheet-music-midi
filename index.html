@@ -78,11 +78,11 @@
 
           <div class="navbar-nav view-selection">
             <div class="btn-group">
-              <input type="radio" class="btn-check" name="viewOptions" id="managerMode" autocomplete="off" autocompleted="" onchange="viewChange(event.target.id)" checked>
-              <label class="btn btn-outline-secondary" for="managerMode" data-mdb-ripple-init="">Manager</label>
+              <input type="radio" class="btn-check" name="viewOptions" id="radioManagerMode" autocomplete="off" autocompleted="" onchange="setDisplayMode('manager')" checked>
+              <label class="btn btn-outline-secondary" for="radioManagerMode" data-mdb-ripple-init="">Manager</label>
 
-              <input type="radio" class="btn-check" name="viewOptions" id="viewerMode" autocomplete="off" autocompleted="" onchange="viewChange(event.target.id)">
-              <label class="btn btn-outline-secondary" for="viewerMode" data-mdb-ripple-init="">Viewer</label>
+              <input type="radio" class="btn-check" name="viewOptions" id="radioViewerMode" autocomplete="off" autocompleted="" onchange="setDisplayMode('viewer')">
+              <label class="btn btn-outline-secondary" for="radioViewerMode" data-mdb-ripple-init="">Viewer</label>
             </div>
           </div>
 
@@ -185,6 +185,7 @@
   <script src="assets/bootstrap-table/extensions/reorder-rows/bootstrap-table-reorder-rows.min.js"></script>
 
   <!-- App scripts -->
+  <script src="assets/js/sv.js"></script>
   <script src="assets/js/sv-manager.js"></script>
   <script src="assets/js/sv-midi.js"></script>
   <script src="assets/js/sv-sheet-storage.js"></script>
@@ -193,23 +194,10 @@
   <script>
     function initSheetViewer() {
 
-      console.log("About to get SheetData instance")
       const sheetData = SheetData.getInstance()
         .then(sheetData => {
-          // TEST/DEBUG
-          console.log("DEBUG: SheetData instance created")
-          console.log(sheetData)
-          console.log(sheetData.db)
-          sheetData.getSheetNames()
-            .then(sheetNames => {
-              console.log("DEBUG: Sheet names")
-              console.log(sheetNames)
-            })
-          return sheetData
-        })
-        .then(sheetData => {
+          setDisplayMode("viewer")
           // updateSheetManagerTable()
-          //viewChange("managerMode")
           //updateMenu()
           return sheetData
         })
