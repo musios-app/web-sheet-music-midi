@@ -105,7 +105,7 @@
           <div class="add-sheet-music">
             <h5 class="card-title text-center pt-2 pb-3">Add Sheet Music</h5>
 
-            <div class="dropzone w-100 align-items-center text-center my-2">
+            <div id="droparea" class="w-100 align-items-center text-center my-2">
               Drop files here
               <img class="my-2" src="assets/images/music-file-icon.png" height="100"/>
             </div>
@@ -122,14 +122,6 @@
             <p class="text-center my-2" style="color: #888">(Past URL)</p>
 
           </div>
-
-
-          <!-- <div>
-            Supported file types:
-            <ul>
-              <li>PDF</li>
-            </ul>
-          </div> -->
         </div>
 
 
@@ -181,275 +173,59 @@
 
 
 
-
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
   <!-- Material Design for Bootstrap -->
   <script type="text/javascript" src="assets/mdb/mdb.umd.min.js"></script>
 
+  <!-- Bootstrap extensions -->
   <script src="assets/TableDnD/jquery.tablednd.1.0.5.min.js"></script>
   <script src="assets/bootstrap-table/bootstrap-table.min.js"></script>
   <script src="assets/bootstrap-table/extensions/reorder-rows/bootstrap-table-reorder-rows.min.js"></script>
 
-  <!-- Custom scripts -->
-  <script src="assets/js/droparea.js"></script>
-  <script src="assets/js/midi-sheet-request.js"></script>
-  <script src="assets/js/musios-sheet-storage.js"></script>
+  <!-- App scripts -->
+  <script src="assets/js/sv-manager.js"></script>
+  <script src="assets/js/sv-midi.js"></script>
+  <script src="assets/js/sv-sheet-storage.js"></script>
   
+
   <script>
-    <!-- scripts for management of the display -->
+    function initSheetViewer() {
 
-    function viewChange(id) {
-      $("body .display-viewer").hide()
-      $("body .display-manager").hide()
-
-      if (id === "viewerMode") 
-        $(`body .display-viewer`).show()
-      else if (id === "managerMode") 
-        $(`body .display-manager`).show()
-    }
-
-    function updateMenu() {
-      const fileSelectionMenu = $("#file-selection")
-      const fileSelectionList = $('#file-selection-list')
-
-      sheetData.getSheetNames(filenames => {
-        console.log(filenames)
-        if (!filenames || filenames.length === 0) {
-          fileSelectionMenu.addClass("disabled")
-          return
-        }x
-
-        fileSelectionList.empty()
-        fileSelectionMenu.removeClass("disabled")
-
-        const liItem = $(`<li><a class='dropdown-item' href='#'>${filename}</a></li>`)
-        fileSelectionList.append(liItem)
-
-        liItem.click(event => {
-          console.log(filename)
+      console.log("About to get SheetData instance")
+      const sheetData = SheetData.getInstance()
+        .then(sheetData => {
+          // TEST/DEBUG
+          console.log("DEBUG: SheetData instance created")
+          console.log(sheetData)
+          console.log(sheetData.db)
+          sheetData.getSheetNames()
+            .then(sheetNames => {
+              console.log("DEBUG: Sheet names")
+              console.log(sheetNames)
+            })
+          return sheetData
         })
-      })
+        .then(sheetData => {
+          // updateSheetManagerTable()
+          //viewChange("managerMode")
+          //updateMenu()
+          return sheetData
+        })
+        .then(sheetData => {
+          sheetData.getSheetNames()
+        })
+        .catch(error => {
+          console.log("Error initializing SheetData")
+          console.error(error)
+        })
     }
-
-    
-    setDropArea(document.getElementById('droparea'), (filename, filetype, dataURI) => {
-      sheetData.addSheet(filename, filetype, dataURI, () => {
-        updateMenu();
-        showSheet(dataURI);
-      }, (error) => {
-        console.error(error);
-      });
-    })
-  </script>
-
-  <script>
-    function showSheet(filename) {
-      // Display parameters: https://pdfobject.com/pdf/pdf_open_parameters_acro8.pdf
-      //
-      // view=FitH | FitV, FitR, FitB, FitBH, FitBV
-      // zoom=nn%
-      // 
-      // navpanes=1 | 0
-      // toolbar=1 | 0
-      // toolbar: 0, 1, 2 top|bottom|both|none
-      //
-      // scrollbar=1|0
-
-      const pdfDisplayOpts = "#view=FitB&toolbar=1";
-
-      if (filename.startsWith('data:')) {
-        document.getElementById("pdf-iframe").setAttribute('src', filename + pdfDisplayOpts);
-      }
-      else {
-        const dataURI = sheetData.getSheet(filename,
-          sheet => document.getElementById("pdf-iframe").setAttribute('src', sheet.data + pdfDisplayOpts),
-          error => console.error(error)
-        );
-      }
-    }
-
-    const aboutHTML = `
-      <html>
-        <head>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 20px;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>Sheet Viewer by musios.app</h1>
-          <p>This is a simple web-based sheet music viewer that can be controlled via MIDI messages.</p>
-        </body>
-      </html>
-    `
-
-    const aboutHTML_dataURI = `data:text/html;base64,${btoa(unescape(encodeURIComponent(aboutHTML)))}`
-
-    showSheet(aboutHTML_dataURI)
-  </script>
-
-  <script>
-    /*
-    function selectSong(songName) {
-      const elSelect = document.getElementById('file-selection');
-      let found = false;
-
-      for (const option of elSelect.options) {
-        const filename = option.value.substring(option.value.lastIndexOf('/') + 1);
-
-        if (filename.trim().toLowerCase().startsWith(songName.trim().toLowerCase())) {
-          // console.log(`Found song: ${songName}`);
-          elSelect.value = option.value;
-          showSheet(option.value);
-          found = true;
-          document.getElementById("error-message").innerHTML = "&nbsp;";
-          break;
-        }
-      }
-
-      if (!found) {
-        document.getElementById("error-message").innerText = "Song not found: " + songName;
-      }
-    }
-    */
-  </script>
-
-  <script>
-    /*
-    const pdfMidiDevice = "IAC Driver PDFBrowser"
-
-    initMidiSheetRequest(
-      pdfMidiDevice,
-      songName => selectSong(songName)
-    )
-    */
-  </script>
-
-
-  <script>
-    const supportedMediaTypes = {
-      "application/pdf": {
-        type: "PDF",
-        icon: "assets/images/fa-pdf.svg",
-      }
-    };
-
-    $(function() {
-      const tbody = $("#sheet-music-table tbody");
-
-      sheetData.getSheetNames(filenames => {
-        // console.log("filenames", filenames);
-
-        filenames.forEach(filename => {
-          sheetData.getSheet(filename, data => {
-            $('#sheet-music-table').bootstrapTable('insertRow', {
-              index: 1,
-              row: {
-                order: `<img src="assets/images/fa-bars.svg" height="20px"/>`,
-                view: `<img src="assets/images/fa-eye-regular.svg" height="20px"/>`,
-                filename: filename,
-                songname: filename,
-                type: `<!-- ${supportedMediaTypes[data.filetype].type} --> <img src="${supportedMediaTypes[data.filetype].icon}" height="20px"/>`,
-                size: data.data.length,
-              }
-            });
-          }, error => console.error(error));
-        });
-      });
-
-      $('#sheet-music-table').bootstrapTable({
-        dragHandle: '.reorder',
-        columns: [
-          {
-            title: 'Order',
-            field: 'order',
-            class: 'reorder'
-          },
-          {
-            title: 'View',
-            field: 'view',
-            class: 'view',
-            align: 'center'
-          },
-          {
-            title: 'Song name',
-            field: 'songname',
-            class: 'songname'
-          },
-          {
-            title: 'Filename',
-            field: 'filename',
-            class: 'filename'
-          },
-          {
-            title: 'Type',
-            field: 'type',
-            class: 'type',
-            align: 'center',
-          },
-          {
-            title: 'Size',
-            field: 'size',
-            class: 'size',
-            align: 'right',
-            formatter: function (value) {
-              if (value < 1024) return value + ' bytes';
-              value = value / 1024;
-              if (value < 1024) return Math.round(value) + 'KB';
-              value = value / 1024;
-              if (value < 1024) return Math.round(value) + 'MB';
-              value = value / 1024;
-              if (value < 1024) return Math.round(value) + 'GB';
-            }
-          },
-        ]
-      });
-    });
-
-    function customSort(sortName, sortOrder, data) {
-      console.log(sortName, sortOrder, data);
-
-      var order = sortOrder === 'desc' ? -1 : 1
-      data.sort(function (a, b) {
-        var aa = +((a[sortName] + '').replace(/[^\d]/g, ''))
-        var bb = +((b[sortName] + '').replace(/[^\d]/g, ''))
-
-        if (aa < bb) {
-          return order * -1
-        }
-        if (aa > bb) {
-          return order
-        }
-        return 0
-      })
-    }  
-  </script>
-
-
-
-
-  <script>
-    function initDisplay() {
-      console.log('Initializing viewer');
-
-      sheetData.init(() => {
-        console.log('Sheet data initialized');
-        viewChange("managerMode")
-        // updateMenu()
-      }, (error) => {
-        console.error(error);
-      });
-    }
-
 
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initDisplay)
+      document.addEventListener("DOMContentLoaded", initSheetViewer)
     } else {
-      initDisplay()  
+      initSheetViewer()  
     }
   </script>
 

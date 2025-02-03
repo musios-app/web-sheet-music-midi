@@ -1,3 +1,12 @@
+/*
+const pdfMidiDevice = "IAC Driver PDFBrowser"
+
+initMidiSheetRequest(
+  pdfMidiDevice,
+  songName => selectSong(songName)
+)
+*/
+
 
 function initMidiSheetRequest(midiDeviceName, callback, errorCallback) {
     let _midiAccess = null;
