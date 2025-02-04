@@ -25,9 +25,7 @@ class SheetData {
       const request = window.indexedDB.open(databaseName, versionNumber)
 
       request.onsuccess = function (event) {
-        console.debug("Database opened successfully")
         SheetData.#instance.db = event.target.result
-        console.debug(SheetData.#instance)
         resolve(SheetData.#instance)
       }
 
@@ -37,12 +35,10 @@ class SheetData {
       }
 
       request.onupgradeneeded = function (event) {
-        console.debug("Database create/upgrade needed")
         SheetData.#instance.db = event.target.result
 
         const storeRequest = SheetData.#instance.db.createObjectStore(sheetStoreName, { keyPath: "filename" })
         storeRequest.onsuccess = function (/* event */) {
-          console.debug("Sheet store created successfully")
           resolve(SheetData.#instance)
         }
 
@@ -238,12 +234,42 @@ const sheetData = {
 
 
 const SV_Manager = {
-
   supportedMediaTypes: {
+
+    "image/rtf": {
+      type: "Text",
+      imguri: "assets/images/filetypes/filetype-rtf.svg"
+    },
+
+    "text/plain": {
+      type: "Text",
+      imguri: "assets/images/filetypes/filetype-text.svg"
+    },
+
     "application/pdf": {
       type: "PDF",
-      icon: "assets/images/fa-pdf.svg",
-    }
+      imguri: "assets/images/filetypes/filetype-pdf.svg"
+    },
+
+    "image/jpeg": {
+      type: "JPEG",
+      imguri: "assets/images/filetypes/filetype-jpg.svg"
+    },
+  
+    "image/jpg": {
+      type: "JPEG",
+      imguri: "assets/images/filetypes/filetype-jpg.svg"
+    },
+  
+    "image/png": {
+      type: "Text",
+      imguri: "assets/images/filetypes/filetype-png.svg"
+    },
+
+    "image/svg+xml": {
+      type: "SVG",
+      imguri: "assets/images/filetypes/filetype-svg.svg"
+    },
   },
   
 
@@ -287,37 +313,39 @@ const SV_Manager = {
   },
 
 
-  updateSheetManagerTable() {
-    const tbody = $("#sheet-music-table tbody");
+  updateSheetManagerTable(sheetData) {
+    sheetData.getSheetNames()
+      .then(filenames => {
+        console.debug("filenames", filenames);
 
-    sheetData.getSheetNames(filenames => {
-      // console.log("filenames", filenames);
+        filenames.forEach(filename => {
+          sheetData.getSheet(filename, data => {
+            console.debug("file", filename, data)
 
-      filenames.forEach(filename => {
-        sheetData.getSheet(filename, data => {
-          $('#sheet-music-table').bootstrapTable('insertRow', {
-            index: 1,
-            row: {
-              order: `<img src="assets/images/fa-bars.svg" height="20px"/>`,
-              view: `<img src="assets/images/fa-eye-regular.svg" height="20px"/>`,
-              filename: filename,
-              songname: filename,
-              type: `<!-- ${supportedMediaTypes[data.filetype].type} --> <img src="${supportedMediaTypes[data.filetype].icon}" height="20px"/>`,
-              size: data.data.length,
-            }
-          });
-        }, error => console.error(error));
-      });
-    });
+            $('#sheet-music-table').bootstrapTable('insertRow', {
+              index: 1,
+              row: {
+                // order: `<img src="assets/images/fa-bars.svg" height="20px"/>`,
+                view: `<img src="assets/images/fa-eye-regular.svg" height="20px"/>`,
+                filename: filename,
+                songname: filename,
+                type: `<img src="${SV_Manager.supportedMediaTypes[data.filetype].imguri}" height="20px"/>`,
+                size: data.data.length,
+                delete: `<img src="assets/images/fa-trash-can-regular.svg" height="20px"/>`,
+              }
+            });
+          }, error => console.error(error))
+        });
+      })
 
     $('#sheet-music-table').bootstrapTable({
-      dragHandle: '.reorder',
+      // dragHandle: '.reorder',
       columns: [
-        {
-          title: 'Order',
-          field: 'order',
-          class: 'reorder'
-        },
+        // {
+        //   title: 'Order',
+        //   field: 'order',
+        //   class: 'reorder'
+        // },
         {
           title: 'View',
           field: 'view',
@@ -355,28 +383,34 @@ const SV_Manager = {
             if (value < 1024) return Math.round(value) + 'GB';
           }
         },
+        {
+          title: 'Delete',
+          field: 'delete',
+          class: 'delete',
+          align: 'center',
+        },
       ]
     });
   },
 
 
-  customSort(sortName, sortOrder, data) {
-    console.log(sortName, sortOrder, data);
+  // customSort(sortName, sortOrder, data) {
+  //   console.log(sortName, sortOrder, data);
 
-    var order = sortOrder === 'desc' ? -1 : 1
-    data.sort(function (a, b) {
-      var aa = +((a[sortName] + '').replace(/[^\d]/g, ''))
-      var bb = +((b[sortName] + '').replace(/[^\d]/g, ''))
+  //   var order = sortOrder === 'desc' ? -1 : 1
+  //   data.sort(function (a, b) {
+  //     var aa = +((a[sortName] + '').replace(/[^\d]/g, ''))
+  //     var bb = +((b[sortName] + '').replace(/[^\d]/g, ''))
 
-      if (aa < bb) {
-        return order * -1
-      }
-      if (aa > bb) {
-        return order
-      }
-      return 0
-    })
-  }  
+  //     if (aa < bb) {
+  //       return order * -1
+  //     }
+  //     if (aa > bb) {
+  //       return order
+  //     }
+  //     return 0
+  //   })
+  // }  
 }
 
 
