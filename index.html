@@ -5,7 +5,9 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" type="image/png" href="/assets/images/musios-logo-black-circle.png"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/png" href="/assets/images/musios-logo-black-circle.png">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
   <title>Web Sheet Music Viewer | musios.app</title>
 
   <meta property="og:title" content="Web Sheet Music Viewer | musios.app" />
@@ -24,12 +26,12 @@
   </script>
 
   <!-- Material Design for Bootstrap -->
-  <link href="assets/mdb/mdb.min.css" rel="stylesheet"/>
+  <link href="assets/mdb/mdb.min.css" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/bootstrap-table/bootstrap-table.min.css">
   <link rel="stylesheet" href="assets/bootstrap-table/extensions/reorder-rows/bootstrap-table-reorder-rows.css">
 
-  <link href="assets/css/sheetviewer.css" rel="stylesheet"/>
+  <link href="assets/css/sheetviewer.css" rel="stylesheet" />
 
   <!-- Google tag (gtag.js) -->
   <!--
@@ -47,183 +49,189 @@
 
 <body>
 
-<div class="container-fluid">
-  <div class="container-fluid bg-danger text-light text-center p-3">
-    STATUS: in development and not yet functional
-  </div>
-
-  <header>
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <img src="assets/images/musios-logo-blue-circle.svg" alt="musios.app logo">
-        </a>
-
-        <div class="collapse navbar-collapse">
-          <div class="navbar-nav me-auto text-primary">
-            Sheet Music Viewer - musios.app
-          </div>
-
-          <div class="navbar-nav me-auto">
-            <a data-mdb-dropdown-init class="btn btn-outline-secondary dropdown-toggle" href="#" id="file-selection" role="button" aria-expanded="false">
-              Select Song
-            </a>
-            <ul id="file-selection-list" class="dropdown-menu" aria-labelledby="file-selection">
-              <li>
-                <a class="dropdown-item">No sheet music files found</a> 
-              </li>
-            </ul>
-          </div>
-
-          <div class="navbar-nav view-selection">
-            <div class="btn-group">
-              <input type="radio" class="btn-check" name="viewOptions" id="radioManagerMode" autocomplete="off" autocompleted="" onchange="SV_Navigation.setDisplayMode('manager')" checked>
-              <label class="btn btn-outline-secondary" for="radioManagerMode" data-mdb-ripple-init="">Manager</label>
-
-              <input type="radio" class="btn-check" name="viewOptions" id="radioViewerMode" autocomplete="off" autocompleted="" onchange="SV_Navigation.setDisplayMode('viewer')">
-              <label class="btn btn-outline-secondary" for="radioViewerMode" data-mdb-ripple-init="">Viewer</label>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </nav>
-  </header>
-
-
-  <section class="error">
-    <div id="error-message" style="display: none">&nbsp; some kind of error</div>
-  </section>
-
-  <section id="display-selector">
-
-    <div class="display-manager sheet-manager">
-      <div class="row">
-        <div class="col-2">
-          <div class="add-sheet-music">
-            <h5 class="card-title text-center pt-2 pb-3">Add Sheet Music</h5>
-
-            <div id="droparea" class="w-100 align-items-center text-center my-2">
-              Drop Files
-              <p style="font-size: 80%">PDF, Text, Image, TBD...</p>
-              <img class="my-2 mx-auto" src="assets/images/music-file-icon.png" height="80"/>
-            </div>
-            
-            <p class="text-center my-2">OR</p>
-
-            <div class="my-2" style="text-align: center;">
-              <label for="fileInput" class="btn btn-outline-secondary">Choose file(s)</label>
-              <input type="file" id="fileInput" name="fileInput" style="display: none;" multiple />
-            </div>
-
-            <p class="text-center my-2" style="color: #888">OR</p>
-
-            <p class="text-center my-2" style="color: #888">(Past URL)</p>
-
-          </div>
-        </div>
-
-
-        <div class="col-10">
-          <div id="manage-area">
-            <h5 class="card-title text-center">Manage Sheet Music</h5>
-
-            <table
-              width="50%"
-              id="sheet-music-table"
-              data-pagination="false"
-              data-search="false"
-              data-show-toggle="true"
-              data-custom-sort="customSort"
-              data-toolbar="false"
-              data-use-row-attr-func="true"
-              data-reorderable-rows="true"
-            >
-            
-              <thead>
-                <tr>
-                  <th data-field="drag" data-checkbox="false">Order</th>
-                  <!-- <th data-field="state" data-checkbox="true">Toggle</th> -->
-                  <th data-field="view" data-checkbox="false">View</th>
-                  <th data-field="songname" data-sortable="true">Song name</th>
-                  <th data-field="filename" data-sortable="true">Filename</th>
-                  <th data-field="type" data-sortable="true">Type</th>
-                  <th data-field="size" data-sortable="true">Size</th>
-                </tr>
-              </thead>
-              <tbody>
-            
-              </tbody>
-            </table>
-          
-          </div>
-        </div>
-
-      </div>
-
+  <div class="container-fluid">
+    <div class="container-fluid bg-danger text-light text-center p-3">
+      STATUS: in development and not yet functional
     </div>
 
+    <header>
 
-    <div class="display-viewer sheet-wrapper">
-      <iframe id="pdf-iframe"></iframe>
-  </div>
-  </section>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">
+            <img src="assets/images/musios-logo-blue-circle.svg" alt="musios.app logo">
+          </a>
+
+          <div class="collapse navbar-collapse">
+            <div class="navbar-nav me-auto text-primary">
+              Sheet Music Viewer - musios.app
+            </div>
+
+            <div class="navbar-nav me-auto">
+
+              <button type="button" class="btn">
+                <img src="assets/images/font-awesome/fa-caret-left.svg" class="fa-text-height" alt="Previous song">
+              </button>
+
+              <a data-mdb-dropdown-init class="btn btn-outline-secondary dropdown-toggle" href="#" id="file-selection"
+                role="button" aria-expanded="false">
+                Select Song
+              </a>
+              <ul id="file-selection-list" class="dropdown-menu" aria-labelledby="file-selection">
+                <li>
+                  <a class="dropdown-item">No sheet music files found</a>
+                </li>
+              </ul>
+
+              <button type="button" class="btn">
+                <img src="assets/images/font-awesome/fa-caret-right.svg" class="fa-text-height" alt="Next song">
+              </button>
+
+              <button type="button" class="btn btn-secondary" onclick="SV_Navigation.updateMenu()">
+                updateMenu
+              </button>
+            </div>
+
+            <div class="navbar-nav view-selection">
+              <div class="btn-group">
+                <input type="radio" class="btn-check" name="viewOptions" id="radioManagerMode" autocomplete="off"
+                  autocompleted="" onchange="SV_Navigation.setDisplayMode('manager')" checked>
+                <label class="btn btn-outline-secondary" for="radioManagerMode" data-mdb-ripple-init="">Manager</label>
+
+                <input type="radio" class="btn-check" name="viewOptions" id="radioViewerMode" autocomplete="off"
+                  autocompleted="" onchange="SV_Navigation.setDisplayMode('viewer')">
+                <label class="btn btn-outline-secondary" for="radioViewerMode" data-mdb-ripple-init="">Viewer</label>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </nav>
+    </header>
 
 
-  <!-- JQuery -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <section class="error">
+      <div id="error-message" style="display: none">&nbsp; some kind of error</div>
+    </section>
 
-  <!-- Material Design for Bootstrap -->
-  <script type="text/javascript" src="assets/mdb/mdb.umd.min.js"></script>
+    <section id="display-selector">
 
-  <!-- Bootstrap extensions -->
-  <script src="assets/TableDnD/jquery.tablednd.1.0.5.min.js"></script>
-  <script src="assets/bootstrap-table/bootstrap-table.min.js"></script>
-  <script src="assets/bootstrap-table/extensions/reorder-rows/bootstrap-table-reorder-rows.min.js"></script>
+      <div class="display-manager sheet-manager">
+        <div class="row">
+          <div class="col-2">
+            <div class="add-sheet-music">
+              <h5 class="card-title text-center pt-2 pb-3">Add Sheet Music</h5>
 
-  <!-- App scripts -->  
-  <script src="assets/js/sheetviewer.js"></script>
+              <div id="droparea" class="w-100 align-items-center text-center my-2">
+                Drop Files
+                <p style="font-size: 80%">PDF, Text, Image, TBD...</p>
+                <img class="my-2 mx-auto" src="assets/images/music-file-icon.png" height="80" />
+              </div>
 
-  <script>
-    function initDragDrop(sheetData) {
-      // Enable drap and drop
-      SV_Manager.setDropArea(document.getElementById('droparea'), (filename, filetype, dataURI) => {
-        SheetData.getInstance().then(sheetData => {
-          sheetData.addSheet(filename, filetype, dataURI, () => {
+              <p class="text-center my-2">OR</p>
+
+              <div class="my-2" style="text-align: center;">
+                <label for="fileInput" class="btn btn-outline-secondary">Choose file(s)</label>
+                <input type="file" id="fileInput" name="fileInput" style="display: none;" multiple />
+              </div>
+
+              <p class="text-center my-2" style="color: #888">OR</p>
+
+              <p class="text-center my-2" style="color: #888">(Past URL)</p>
+
+            </div>
+          </div>
+
+
+          <div class="col-10">
+            <div id="manage-area"  style="overflow-y: auto; max-height: 400px;">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-6 d-flex align-items-center">
+                    <h5 class="card-title mb-0">Manage Sheet Music</h5>
+                    <img src="assets/images/font-awesome/fa-trash-can-regular.svg" class="img-fluid fa-text-height ms-2" alt="Delete all sheets">
+                  </div>
+                </div>
+              </div>
+
+              <table width="50%" id="sheet-music-table" data-pagination="false" data-search="false"
+                data-show-toggle="true" data-custom-sort="customSort" data-toolbar="false" data-use-row-attr-func="true"
+                data-reorderable-rows="true">
+              </table>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="display-viewer sheet-wrapper">
+        <iframe id="pdf-iframe"></iframe>
+      </div>
+    </section>
+
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Material Design for Bootstrap -->
+    <script type="text/javascript" src="assets/mdb/mdb.umd.min.js"></script>
+
+    <!-- Bootstrap extensions -->
+    <!-- <script src="assets/TableDnD/jquery.tablednd.1.0.5.min.js"></script> -->
+    <script src="assets/bootstrap-table/bootstrap-table.min.js"></script>
+    <!-- <script src="assets/bootstrap-table/extensions/reorder-rows/bootstrap-table-reorder-rows.min.js"></script> -->
+
+    <!-- App scripts -->
+    <script src="assets/js/sheetviewer.js"></script>
+
+    <script>
+      function initDragDrop(sheetData) {
+        // Enable drap and drop
+        SV_Manager.setDropArea(document.getElementById('droparea'), (filename, filetype, dataURI) => {
+          SheetData.getInstance()
+            .then(sheetData => {
+              sheetData.addSheet(filename, filetype, dataURI)
+                .then(() => {
+                  console.log("Sheet added")
+                  SV_Navigation.updateMenu()
+                  SV_Manager.updateSheetManagerTable(sheetData)
+                })
+                .catch(error => {
+                  console.error("Error adding sheet")
+                  console.error(error)
+                  alert("Error adding sheet")
+                })
+            })
+        })
+      }
+
+      function initSheetViewer() {
+        sheetData = SheetData.getInstance()
+          .then(sheetData => {
+            console.debug("Sheet database ready")
+            SV_Navigation.setDisplayMode('manager')
+            initDragDrop(sheetData)
             SV_Navigation.updateMenu()
-            SV_Manager.updateSheetManagerTable()
-          }, (error) => {
-            console.error(error)
+            SV_Manager.updateSheetManagerTable(sheetData)
           })
-
-        })
-      })
-    }
-
-    function initSheetViewer() {
-      sheetData = SheetData.getInstance()
-        .then(sheetData => {
-          console.debug("Sheet database ready")
-          initDragDrop(sheetData)
-          SV_Navigation.updateMenu()
-          SV_Manager.updateSheetManagerTable(sheetData)
-        })
-        .catch(error => {
-          console.error("Error initializing Sheet Viewer")
-          console.error(error)
-          alert("Error initializing Sheet Viewer")
-        })
-    }
+          .catch(error => {
+            console.error("Error initializing Sheet Viewer")
+            console.error(error)
+            alert("Error initializing Sheet Viewer")
+          })
+      }
 
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initSheetViewer)
-    } else {
-      initSheetViewer()  
-    }
-  </script>
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initSheetViewer)
+      } else {
+        initSheetViewer()
+      }
+    </script>
 
 </body>
 

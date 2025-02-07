@@ -7,6 +7,10 @@
   color: #224;
 }
 
+.fa-text-height {
+  max-height: 16px;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -94,7 +98,7 @@ header {
 
 #sheet-music-table {
   border-collapse: separate;
-  border-spacing: 0 10px;
+  border-spacing: 0 5px;
 }
 
 #sheet-music-table tr {
@@ -102,15 +106,15 @@ header {
 }
 
 #sheet-music-table tr td:first-child {
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
   text-align: center;
   padding: 0;
 }
 
 #sheet-music-table tr td:last-child {
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 #sheet-music-table th {

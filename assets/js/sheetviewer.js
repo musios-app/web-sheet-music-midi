@@ -126,113 +126,6 @@ class SheetData {
 }
 
 
-/*
-const sheetData = {
-
-    const sheetData = new SheetData();
-    db: null,
-    databaseName: "musios.app",
-    sheetStoreName: "sheets",
-    versionNumber: 1,
-
-    init: (success=null, error=null) => {
-        const request = window.indexedDB.open(sheetData.databaseName, sheetData.versionNumber);
-
-        request.onupgradeneeded = (event) => {
-            sheetData.db = event.target.result;
-            console.log("Database upgrade needed");
-            const objectStore = sheetData.db.createObjectStore(sheetData.sheetStoreName, { keyPath: "filename" });
-        
-            // objectStore.transaction.oncomplete = (event) => {
-            //     const sheetObjectStore = 
-            //         sheetData.db
-            //             .transaction("sheets", "readwrite")
-            //             .objectStore("sheets");
-            // }
-        };
-        
-        request.onsuccess = (event) => {
-            console.log("Database openned successfully");
-            sheetData.db = event.target.result;
-            success && success();
-        }
-
-        request.onerror = (event) => {
-            console.error(`Database error: ${event.target.error?.message}`);
-            error && error(event.target.error?.message);
-        }
-    },
-
-    addSheet: (filename, filetype, data, success=null, error=null) => {
-        const transaction = sheetData.db.transaction(sheetData.sheetStoreName, "readwrite");
-        const objectStore = transaction.objectStore(sheetData.sheetStoreName);
-
-        const request = objectStore.put({ filename, filetype, data } );
-
-        request.onsuccess = (event) => {
-            console.log("Sheet added successfully");
-            success && success();
-        }
-
-        request.onerror = (event) => {
-            console.error(`Sheet add error: ${event.target.error?.message}`);
-            error && error(event.target.error?.message);
-        }
-    },
-
-    getSheetNames(success=null, error=null) {
-        const transaction = sheetData.db.transaction(sheetData.sheetStoreName, "readonly");
-        const objectStore = transaction.objectStore(sheetData.sheetStoreName);
-
-        const request = objectStore.getAllKeys();
-
-        request.onsuccess = (event) => {
-            success && success(event.target.result);
-        }
-
-        request.onerror = (event) => {
-            console.error(`Sheet get error: ${event.target.error?.message}`);
-            error && error(event.target.error?.message);
-        }
-    },
-
-    getSheet(filename, success=null, error=null) {
-        const transaction = sheetData.db.transaction(sheetData.sheetStoreName, "readonly");
-        const objectStore = transaction.objectStore(sheetData.sheetStoreName);
-
-        const request = objectStore.get(filename);
-
-        request.onsuccess = (event) => {
-            success && success(event.target.result);
-        }
-
-        request.onerror = (event) => {
-            console.error(`Sheet get error: ${event.target.error?.message}`);
-            error && error(event.target.error?.message);
-        }
-    },
-
-    deleteDatabase(success=null, error=null) {
-        const request = window.indexedDB.deleteDatabase(sheetData.databaseName, sheetData.versionNumber);
-
-        request.onsuccess = (event) => {
-            console.log("Database deleted successfully");
-            success && success();
-        }
-
-        request.onerror = (event) => {
-            console.error(`Database error: ${event.target.error?.message}`);
-            error && error(event.target.error?.message);
-        }
-    }
-
-
-}
-
-*/
-
-
-
 const SV_Manager = {
   supportedMediaTypes: {
 
@@ -287,8 +180,6 @@ const SV_Manager = {
       event.preventDefault();
       el.classList.remove('hover');
 
-      // console.log(event.dataTransfer.files);
-
       [...event.dataTransfer.files]
         .filter(file => file)
         .forEach(file => {
@@ -316,29 +207,32 @@ const SV_Manager = {
   updateSheetManagerTable(sheetData) {
     sheetData.getSheetNames()
       .then(filenames => {
-        console.debug("filenames", filenames);
-
         filenames.forEach(filename => {
           sheetData.getSheet(filename, data => {
-            console.debug("file", filename, data)
-
             $('#sheet-music-table').bootstrapTable('insertRow', {
               index: 1,
               row: {
-                // order: `<img src="assets/images/fa-bars.svg" height="20px"/>`,
-                view: `<img src="assets/images/fa-eye-regular.svg" height="20px"/>`,
+                // order: `<img src="assets/images/font-awesome/fa-bars.svg" class="fa-text-height" click="console.log('ORDER')"/>`,
+                view: `<img src="assets/images/font-awesome/fa-expand.svg" class="fa-text-height" click="console.log('VIEW')"/>`,
                 filename: filename,
-                songname: filename,
-                type: `<img src="${SV_Manager.supportedMediaTypes[data.filetype].imguri}" height="20px"/>`,
+                // songname: filename,
+                type: `<img src="${SV_Manager.supportedMediaTypes[data.filetype].imguri}" class="fa-text-height"/>`,
                 size: data.data.length,
-                delete: `<img src="assets/images/fa-trash-can-regular.svg" height="20px"/>`,
+                delete: `<img src="assets/images/font-awesome/fa-trash-can-regular.svg" class="fa-text-height" click="console.log('herre')" click2="SV_Manager.deleteRow(event)"/>`,
               }
             });
           }, error => console.error(error))
         });
       })
 
+    function ignoreClickToSelectOn(e) {
+      console.log(e)
+      return true;
+      // return ['A', 'BUTTON', 'LABEL', 'INPUT'].indexOf(e.tagName) > -1
+    }
+    
     $('#sheet-music-table').bootstrapTable({
+      ignoreClickToSelectOn: false,
       // dragHandle: '.reorder',
       columns: [
         // {
@@ -352,11 +246,11 @@ const SV_Manager = {
           class: 'view',
           align: 'center'
         },
-        {
-          title: 'Song name',
-          field: 'songname',
-          class: 'songname'
-        },
+        // {
+        //   title: 'Song name',
+        //   field: 'songname',
+        //   class: 'songname'
+        // },
         {
           title: 'Filename',
           field: 'filename',
@@ -391,8 +285,21 @@ const SV_Manager = {
         },
       ]
     });
+
+    window.operateEvents = {
+      'click .delete': function (e, value, row, index) {
+        $('#sheet-music-table').bootstrapTable('remove', {
+          field: 'id',
+          values: [row.id]
+        })
+      }
+    }
   },
 
+  deleteRow(event) {
+    console.log(event)
+    // let rowid = $(this).closest('tr').data('index');
+  }
 
   // customSort(sortName, sortOrder, data) {
   //   console.log(sortName, sortOrder, data);
@@ -435,31 +342,33 @@ const SV_Navigation = {
   },
 
   updateMenu() {
-    const fileSelectionMenu = $("#file-selection")
     const fileSelectionList = $('#file-selection-list')
-
+    
     SheetData.getInstance()
       .then(sheetData => {
-        sheetData.getSheetNames(filenames => {
-          console.log("updateMenu filenames", filenames)
-          if (!filenames || filenames.length === 0) {
-            fileSelectionMenu.addClass("disabled")
-            return
-          }
+        sheetData.getSheetNames()
+          .then(filenames => {
+            fileSelectionList.empty()
 
-          // fileSelectionList.empty()
-          // fileSelectionMenu.removeClass("disabled")
+            if (!filenames || filenames.length === 0) {
+              fileSelectionList.append(
+                `<li><a class="dropdown-item disabled" >No sheet music files loaded</a></li>`)
+            }
+            else {
+              filenames.forEach(filename => {
+                const liItem = $(`<li><a class='dropdown-item' href='#'>${filename}</a></li>`)
+                fileSelectionList.append(liItem)
 
-          // const liItem = $(`<li><a class='dropdown-item' href='#'>${filename}</a></li>`)
-          // fileSelectionList.append(liItem)
-
-          // liItem.click(event => {
-          //   console.log(filename)
-          // })
+                liItem.click(() => {
+                  console.log(filename)
+                })
+              })
+            }
         })
       })
   }
 }
+
 
 
 /*
