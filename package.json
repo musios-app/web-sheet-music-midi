@@ -1,0 +1,21 @@
+{
+  "name": "web-sheet-music-midi",
+  "version": "0.1.0",
+  "description": "Browser viewer for sheet music",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "eslint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "eslint": "^8.57.1",
+    "globals": "^15.14.0"
+  },
+  "dependencies": {
+    "eslint-config-standard": "^17.1.0"
+  }
+}
