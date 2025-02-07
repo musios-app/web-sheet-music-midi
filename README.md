@@ -147,3 +147,14 @@ A localhost version also has the advantage that no internet access is needed dur
   * Maybe Word and Excel
 * Downloadable offline app
 
+
+## Install
+
+### Prerequisites
+
+* node.js
+* npm
+
+## Installation
+
+```npm install```
